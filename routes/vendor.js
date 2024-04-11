@@ -2,7 +2,7 @@ const router = require("express").Router();
 
 const vendorController = require("../controllers/vendorController");
 
-router.post("/", vendorController.addVendor);
+router.post("/create", vendorController.addVendor);
 
 router.get("/byId/:id", vendorController.getVendorbyId);
 
