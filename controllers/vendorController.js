@@ -1,13 +1,11 @@
-const { velocityjs } = require("consolidate");
 const Vendor = require("../models/Vendor");
 
 module.exports = {
   //api/addVendor
   addVendor: async (req, res) => {
-    const { title, time, imageUrl, owner, code, logoUrl, coords } = req.body;
+    const { title, imageUrl, owner, code, logoUrl, coords } = req.body;
     if (
       !title ||
-      !time ||
       !imageUrl ||
       !owner ||
       !code ||
@@ -42,31 +40,31 @@ module.exports = {
       res.status(500).json({ status: false, message: error.message });
     }
   },
-  //api/getAllVendors
-  getAllNearbyVendors: async (req, res) => {
-    const code = req.params.code;
-    try {
-      let allNearByVendors = [];
-
-      if (code) {
-        allNearByVendors = Vendor.aggregate([
-          { $match: { code: code, isAvailable: true } },
-          { $project: { __v: 0 } },
-        ]);
-      }
-
-      if (allNearByVendors.length === 0) {
-        allNearByVendors = Vendor.aggregate([
-          { $match: { isAvailable: true } },
-          { $project: { __v: 0 } },
-        ]);
-      }
-
-      res.status(200).json(allNearByVendors);
-    } catch (error) {
-      res.status(500).json({ status: false, message: error.message });
-    }
-  },
+  //  //api/getAllVendors
+  //  getAllNearbyVendors: async (req, res) => {
+  //    const code = req.params.code;
+  //    try {
+  //      let allNearByVendors = [];
+  //
+  //      if (code) {
+  //        allNearByVendors = Vendor.aggregate([
+  //          { $match: { code: code, isAvailable: true } },
+  //          { $project: { __v: 0 } },
+  //        ]);
+  //      }
+  //
+  //      if (allNearByVendors.length === 0) {
+  //        allNearByVendors = Vendor.aggregate([
+  //          { $match: { isAvailable: true } },
+  //          { $project: { __v: 0 } },
+  //        ]);
+  //      }
+  //
+  //      res.status(200).json(allNearByVendors);
+  //    } catch (error) {
+  //      res.status(500).json({ status: false, message: error.message });
+  //    }
+  //  },
   //api/getRandomVendor
   getRandomVendor: async (req, res) => {
     const code = req.params.code;

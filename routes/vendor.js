@@ -8,6 +8,6 @@ router.get("/byId/:id", vendorController.getVendorbyId);
 
 router.get("/:code", vendorController.getRandomVendor);
 
-router.get("/all/:code", vendorController.getAllNearbyVendors);
+//router.get("/all/:code", vendorController.getAllNearbyVendors);
 
 module.exports = router;

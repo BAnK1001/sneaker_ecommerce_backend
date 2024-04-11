@@ -3,6 +3,7 @@ const Vendor = require("../models/Vendor");
 const Shoe = require("../models/Shoe");
 
 module.exports = {
+  //api/addRating
   addRating: async (req, res) => {
     const newRating = new Rating({
       userId: req.user.id,
@@ -61,7 +62,7 @@ module.exports = {
       res.status(500).json({ status: false, message: error.message });
     }
   },
-
+  //api/checkUserRating
   checkUserRating: async (req, res) => {
     const ratingType = req.query.ratingType;
     const product = req.query.product;

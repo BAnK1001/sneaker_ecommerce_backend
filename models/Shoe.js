@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 
 const ShoeSchema = new mongoose.Schema({
   title: { type: String, required: true },
-  time: { type: String, required: true },
   shoeTags: { type: Array, required: true },
   brand: { type: String, required: true },
   category: { type: String, required: true },

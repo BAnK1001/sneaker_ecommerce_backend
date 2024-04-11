@@ -2,10 +2,8 @@ const mongoose = require("mongoose");
 
 const VendorShema = new mongoose.Schema({
   title: { type: String, required: true },
-  time: { type: String, required: true },
   imageUrl: { type: String, required: true },
   shoes: { type: Array, default: [] },
-  isAvailable: { type: Boolean, default: true },
   owner: { type: String, required: true },
   code: { type: String, required: true },
   logoUrl: { type: String, required: true },

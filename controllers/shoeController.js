@@ -1,6 +1,7 @@
 const Shoe = require("../models/Shoe");
 
 module.exports = {
+  //api/addShoe
   addShoe: async (req, res) => {
     const {
       title,
@@ -8,7 +9,6 @@ module.exports = {
       code,
       brand,
       description,
-      time,
       shoeTags,
       price,
       imageUrl,
@@ -27,7 +27,6 @@ module.exports = {
       !code ||
       !brand ||
       !description ||
-      !time ||
       !shoeTags ||
       !price ||
       !imageUrl ||
@@ -55,7 +54,7 @@ module.exports = {
       res.status(500).json({ status: false, message: error.message });
     }
   },
-
+  //api/getShoeByID
   getShoeById: async (req, res) => {
     const id = req.params.id;
     try {
@@ -66,7 +65,7 @@ module.exports = {
       res.status(500).json({ status: false, message: error.message });
     }
   },
-
+  //api/getRandomShoes
   getRandomShoe: async (req, res) => {
     try {
       let randomShoeList = [];
@@ -93,6 +92,7 @@ module.exports = {
       res.status(500).json(error);
     }
   },
+  //api/getShoesByVendor
   getShoesByVendor: async (req, res) => {
     const id = req.params.id;
 
@@ -104,7 +104,7 @@ module.exports = {
       res.status(500).json({ status: false, message: error.message });
     }
   },
-
+  //getShoesByCategoryAndCode
   getShoesByCategoryAndCode: async (req, res) => {
     const { category, code } = req.params;
     try {
@@ -122,7 +122,7 @@ module.exports = {
       res.status(500).json({ status: false, message: error.message });
     }
   },
-
+  //api/searchShoes
   searchShoes: async (req, res) => {
     const search = req.params.search;
 
@@ -146,7 +146,7 @@ module.exports = {
       res.status(500).json({ status: false, message: error.message });
     }
   },
-
+  //getRandomShoesByCategoryAndCode
   getRandomShoesByCategoryAndCode: async (req, res) => {
     const { category, code } = req.params;
 
