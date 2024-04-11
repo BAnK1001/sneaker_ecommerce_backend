@@ -1,5 +1,17 @@
 const User = require("../models/User");
 
+async function findUserByIdWithValidation(userId, res) {
+  try {
+    return await User.findById(userId);
+  } catch (error) {
+    handleError(res, error);
+  }
+}
+
+function handleError(res, error) {
+  res.status(500).json({ status: false, message: error.message });
+}
+
 module.exports = {
   getUser: async (req, res) => {
     try {
@@ -9,14 +21,15 @@ module.exports = {
 
       res.status(200).json(userData);
     } catch (error) {
-      res.status(500).json({ status: false, message: error.message });
+      handleError(res, error);
     }
   },
+
   verifyAccount: async (req, res) => {
     const userOtp = req.params.otp;
 
     try {
-      const user = await User.findById(req.user.id);
+      const user = await findUserByIdWithValidation(req.user.id, res);
 
       if (!user) {
         return res
@@ -27,7 +40,6 @@ module.exports = {
       if (userOtp === user.otp) {
         user.verification = true;
         user.otp = "none";
-
         await user.save();
 
         const { password, __v, otp, createdAt, ...others } = user._doc;
@@ -38,7 +50,7 @@ module.exports = {
           .json({ status: false, message: "OTP verification failed" });
       }
     } catch (error) {
-      res.status(500).json({ status: false, message: error.message });
+      handleError(res, error);
     }
   },
 
@@ -46,7 +58,7 @@ module.exports = {
     const phone = req.params.phone;
 
     try {
-      const user = await User.findById(req.user.id);
+      const user = await findUserByIdWithValidation(req.user.id, res);
 
       if (!user) {
         return res
@@ -56,13 +68,12 @@ module.exports = {
 
       user.phoneVerification = true;
       user.phone = phone;
-
       await user.save();
 
       const { password, __v, otp, createdAt, ...others } = user._doc;
       return res.status(200).json({ ...others });
     } catch (error) {
-      res.status(500).json({ status: false, message: error.message });
+      handleError(res, error);
     }
   },
 
@@ -73,7 +84,7 @@ module.exports = {
         .status(200)
         .json({ status: true, message: "User deleted successfully" });
     } catch (error) {
-      res.status(500).json({ status: false, message: error.message });
+      handleError(res, error);
     }
   },
 };

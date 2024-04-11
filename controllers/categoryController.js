@@ -3,8 +3,8 @@ const Category = require("../models/Category");
 module.exports = {
   //api/createCategory
   createCategory: async (req, res) => {
-    const newCategory = new Category(req.body);
     try {
+      const newCategory = new Category(req.body);
       await newCategory.save();
       res
         .status(201)
@@ -13,6 +13,7 @@ module.exports = {
       res.status(500).json({ status: false, message: error.message });
     }
   },
+
   //api/getAllCategory
   getAllCategory: async (req, res) => {
     try {
@@ -25,7 +26,8 @@ module.exports = {
       res.status(500).json({ status: false, message: error.message });
     }
   },
-  //api/getCategoryById
+
+  //api/getRandomCategory
   getRandomCategory: async (req, res) => {
     try {
       let categories = await Category.aggregate([
@@ -37,8 +39,9 @@ module.exports = {
         { __v: 0 }
       );
       if (moreCategory) {
-        categories = push(moreCategory);
+        categories.push(moreCategory);
       }
+      res.status(200).json({ status: true, data: categories });
     } catch (error) {
       res.status(500).json({ status: false, message: error.message });
     }

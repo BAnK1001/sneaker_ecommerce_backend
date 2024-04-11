@@ -2,58 +2,46 @@ const Rating = require("../models/Rating");
 const Vendor = require("../models/Vendor");
 const Shoe = require("../models/Shoe");
 
+const updateAverageRating = async (productType, productId) => {
+  const ratings = await Rating.aggregate([
+    {
+      $match: {
+        ratingType: productType,
+        product: productId,
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        averageRating: { $avg: "$rating" },
+      },
+    },
+  ]);
+
+  if (ratings.length > 0) {
+    const averageRating = ratings[0].averageRating;
+
+    const updateModel = productType === "Vendor" ? Vendor : Shoe;
+    await updateModel.findByIdAndUpdate(
+      productId,
+      { rating: averageRating },
+      { new: true }
+    );
+  }
+};
+
 module.exports = {
-  //api/addRating
   addRating: async (req, res) => {
     const newRating = new Rating({
       userId: req.user.id,
-      ratingType: req.body.rating,
+      ratingType: req.body.ratingType,
       product: req.body.product,
       rating: req.body.rating,
     });
 
     try {
       await newRating.save();
-
-      if (req.body.ratingType === "Vendor") {
-        const vendors = await Rating.aggregate([
-          {
-            $match: {
-              ratingType: req.body.ratingType,
-              product: req.body.product,
-            },
-          },
-          { $group: { _id: "$product" }, averateRating: { $avg: "$rating" } },
-        ]);
-
-        if (vendors.length > 0) {
-          const averageRating = vendors[0].averageRating;
-          await Vendor.findByIdAndUpdate(
-            req.body.product,
-            { rating: averageRating },
-            { new: true }
-          );
-        }
-      } else if (req.body.ratingType === "Shoe") {
-        const shoes = await Rating.aggregate([
-          {
-            $match: {
-              ratingType: req.body.ratingType,
-              product: req.body.product,
-            },
-          },
-          { $group: { _id: "$product" }, averateRating: { $avg: "$rating" } },
-        ]);
-
-        if (shoes.length > 0) {
-          const averageRating = shoes[0].averageRating;
-          await Shoe.findByIdAndUpdate(
-            req.body.product,
-            { rating: averageRating },
-            { new: true }
-          );
-        }
-      }
+      await updateAverageRating(req.body.ratingType, req.body.product);
 
       res
         .status(200)
@@ -62,22 +50,20 @@ module.exports = {
       res.status(500).json({ status: false, message: error.message });
     }
   },
-  //api/checkUserRating
   checkUserRating: async (req, res) => {
-    const ratingType = req.query.ratingType;
-    const product = req.query.product;
+    const { ratingType, product } = req.query;
 
     try {
       const existingRating = await Rating.findOne({
         userId: req.user.id,
-        product: product,
-        ratingType: ratingType,
+        product,
+        ratingType,
       });
 
       if (existingRating) {
         res
           .status(200)
-          .json({ status: true, message: "You have aleady rated this shop" });
+          .json({ status: true, message: "You have already rated this shop" });
       } else {
         res
           .status(200)

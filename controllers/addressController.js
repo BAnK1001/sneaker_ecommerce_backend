@@ -3,18 +3,27 @@ const Address = require("../models/Address");
 
 module.exports = {
   addAddress: async (req, res) => {
+    const { id: userId } = req.user;
+    const {
+      addressLine1,
+      postalCode,
+      default: isDefault,
+      latitude,
+      longitude,
+    } = req.body;
+
     const newAddress = new Address({
-      userId: req.user.id,
-      addressLine1: req.body.addressLine1,
-      postalCode: req.body.postalCode,
-      default: req.body.default,
-      latitude: req.body.latitude,
-      longitude: req.body.longitude,
+      userId,
+      addressLine1,
+      postalCode,
+      default: isDefault,
+      latitude,
+      longitude,
     });
 
     try {
-      if (req.body.default === true) {
-        await Address.updateMany({ userId: req.user.id }, { default: false });
+      if (isDefault === true) {
+        await Address.updateMany({ userId }, { default: false });
       }
 
       await newAddress.save();
@@ -29,17 +38,15 @@ module.exports = {
   getAddresses: async (req, res) => {
     try {
       const addresses = await Address.find({ userId: req.user.id });
-
       res.status(200).json(addresses);
     } catch (error) {
-      res.status(500).json({ stats: false, message: error.message });
+      res.status(500).json({ status: false, message: error.message });
     }
   },
 
   deleteAddress: async (req, res) => {
     try {
       await Address.findByIdAndDelete(req.params.id);
-
       res
         .status(200)
         .json({ status: true, message: "Address successfully deleted" });
@@ -49,11 +56,11 @@ module.exports = {
   },
 
   setAddressDefault: async (req, res) => {
-    const addressId = req.params.id;
-    const userId = req.user.id;
+    const { id: addressId } = req.params;
+    const { id: userId } = req.user;
 
     try {
-      await Address.updateMany({ userId: userId }, { default: false });
+      await Address.updateMany({ userId }, { default: false });
 
       const updatedAddress = await Address.findByIdAndUpdate(addressId, {
         default: true,
@@ -61,7 +68,6 @@ module.exports = {
 
       if (updatedAddress) {
         await User.findByIdAndUpdate(userId, { address: addressId });
-
         res.status(200).json({
           status: true,
           message: "Address successfully set as default",
@@ -75,11 +81,10 @@ module.exports = {
   },
 
   getDefaultAddress: async (req, res) => {
-    const userId = req.user.id;
+    const { id: userId } = req.user;
 
     try {
-      const address = await Address.findOne({ userId: userId, default: true });
-
+      const address = await Address.findOne({ userId, default: true });
       res.status(200).json(address);
     } catch (error) {
       res.status(500).json({ status: false, message: error.message });

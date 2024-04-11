@@ -2,27 +2,27 @@ const Order = require("../models/Order");
 
 module.exports = {
   placeOrder: async (req, res) => {
-    const newOrder = new Order({
-      ...req.body,
-      userId: req.user.id,
-    });
-
     try {
+      const newOrder = new Order({
+        ...req.body,
+        userId: req.user.id,
+      });
+
       await newOrder.save();
 
       const orderId = newOrder._id;
       res.status(200).json({
         status: true,
         message: "Order placed successfully",
-        orderId: orderId,
+        orderId,
       });
     } catch (error) {
-      res.status(500).json({ status: true, message: error.message });
+      res.status(500).json({ status: false, message: error.message });
     }
   },
 
   getUserOrders: async (req, res) => {
-    const userId = re.user.id;
+    const userId = req.user.id;
     const { paymentStatus, orderStatus } = req.query;
 
     let query = { userId };
@@ -31,7 +31,7 @@ module.exports = {
       query.paymentStatus = paymentStatus;
     }
 
-    if (orderStatus === orderStatus) {
+    if (orderStatus) {
       query.orderStatus = orderStatus;
     }
 
