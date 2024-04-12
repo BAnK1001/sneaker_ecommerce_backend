@@ -1,6 +1,7 @@
 const Cart = require("../models/Cart");
 
 module.exports = {
+  //api/addProductToCart
   addProductToCart: async (req, res) => {
     const userId = req.user.id;
     const { productId, totalPrice, quantity, additives } = req.body;
@@ -29,7 +30,7 @@ module.exports = {
       res.status(500).json({ status: false, message: error.message });
     }
   },
-
+  //api/removeCartItem
   removeCartItem: async (req, res) => {
     const cartItemId = req.params.id;
     const userId = req.user.id;
@@ -42,7 +43,7 @@ module.exports = {
       res.status(500).json({ status: false, message: error.message });
     }
   },
-
+  //api/getCart
   getCart: async (req, res) => {
     const userId = req.user.id;
 
@@ -61,7 +62,7 @@ module.exports = {
       res.status(500).json({ status: false, message: error.message });
     }
   },
-
+  //api/getCartCount
   getCartCount: async (req, res) => {
     const userId = req.user.id;
 
@@ -72,7 +73,7 @@ module.exports = {
       res.status(500).json({ status: false, message: error.message });
     }
   },
-
+  //api/descrementProductQty
   decrementProductQty: async (req, res) => {
     const userId = req.user.id;
     const cartItemId = req.params.id;

@@ -95,4 +95,27 @@ module.exports = {
       res.status(500).json({ status: false, message: error.message });
     }
   },
+  // Verify Vendor by ID
+  verifyVendorById: async (req, res) => {
+    const vendorId = req.params.id;
+    try {
+      const vendor = await Vendor.findById(vendorId);
+
+      if (!vendor) {
+        return res
+          .status(404)
+          .json({ status: false, message: "Vendor not found" });
+      }
+      vendor.verification = "Verified";
+      vendor.verificationMessage =
+        "Your shop has been verified by the super admin.";
+      await vendor.save();
+      res
+        .status(200)
+        .json({ status: true, message: "Vendor verified successfully" });
+    } catch (error) {
+      // Return an error message if an error occurs
+      res.status(500).json({ status: false, message: error.message });
+    }
+  },
 };

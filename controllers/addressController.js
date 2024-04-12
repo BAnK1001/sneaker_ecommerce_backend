@@ -2,6 +2,7 @@ const User = require("../models/User");
 const Address = require("../models/Address");
 
 module.exports = {
+  //api/addAddress
   addAddress: async (req, res) => {
     const { id: userId } = req.user;
     const {
@@ -34,7 +35,7 @@ module.exports = {
       res.status(500).json({ status: false, message: error.message });
     }
   },
-
+  //api/getAddresses
   getAddresses: async (req, res) => {
     try {
       const addresses = await Address.find({ userId: req.user.id });
@@ -43,7 +44,7 @@ module.exports = {
       res.status(500).json({ status: false, message: error.message });
     }
   },
-
+  //api/deleteAddress
   deleteAddress: async (req, res) => {
     try {
       await Address.findByIdAndDelete(req.params.id);
@@ -54,7 +55,7 @@ module.exports = {
       res.status(500).json({ status: false, message: error.message });
     }
   },
-
+  //api/setAddressDefault
   setAddressDefault: async (req, res) => {
     const { id: addressId } = req.params;
     const { id: userId } = req.user;
@@ -79,7 +80,7 @@ module.exports = {
       res.status(500).json({ status: false, message: error.message });
     }
   },
-
+  //api/getDefaultAddress
   getDefaultAddress: async (req, res) => {
     const { id: userId } = req.user;
 

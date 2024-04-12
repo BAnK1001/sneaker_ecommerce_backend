@@ -1,6 +1,7 @@
 const Order = require("../models/Order");
 
 module.exports = {
+  //api/placeOrder
   placeOrder: async (req, res) => {
     try {
       const newOrder = new Order({
@@ -20,7 +21,7 @@ module.exports = {
       res.status(500).json({ status: false, message: error.message });
     }
   },
-
+  //api/getUserOrders
   getUserOrders: async (req, res) => {
     const userId = req.user.id;
     const { paymentStatus, orderStatus } = req.query;

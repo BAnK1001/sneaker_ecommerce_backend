@@ -13,6 +13,7 @@ function handleError(res, error) {
 }
 
 module.exports = {
+  //api/getUser
   getUser: async (req, res) => {
     try {
       const user = await User.findById(req.user.id);
@@ -24,7 +25,7 @@ module.exports = {
       handleError(res, error);
     }
   },
-
+  //api/verifyAccount
   verifyAccount: async (req, res) => {
     const userOtp = req.params.otp;
 
@@ -53,7 +54,7 @@ module.exports = {
       handleError(res, error);
     }
   },
-
+  //api/verifyPhone
   verifyPhone: async (req, res) => {
     const phone = req.params.phone;
 
@@ -76,7 +77,7 @@ module.exports = {
       handleError(res, error);
     }
   },
-
+  //api/deleteUser
   deleteUser: async (req, res) => {
     try {
       await User.findByIdAndDelete(req.user.id);

@@ -4,7 +4,7 @@ const vendorController = require("../controllers/vendorController");
 
 router.post("/create", vendorController.addVendor);
 
-router.get("/byId/:id", vendorController.getVendorbyId);
+router.get("/byId/:id", vendorController.getVendorById);
 
 router.get("/:code", vendorController.getRandomVendor);
 

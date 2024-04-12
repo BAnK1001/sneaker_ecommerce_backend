@@ -1,18 +1,39 @@
 const mongoose = require("mongoose");
 
 const orderItemSchema = new mongoose.Schema({
-  shoeId: { type: mongoose.Schema.Types.ObjectId, ref: "Shoe" },
-  quantity: { type: Number, default: 1 },
-  price: { type: Number, required: true },
+  shoeId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Shoe",
+  },
+  quantity: {
+    type: Number,
+    default: 1,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
 });
 
 const OrderSchema = new mongoose.Schema(
   {
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
     orderItems: [orderItemSchema],
-    orderTotal: { type: Number, required: true },
-    deliveryFee: { type: Number, required: true },
-    grandTotal: { type: Number, required: true },
+    orderTotal: {
+      type: Number,
+      required: true,
+    },
+    deliveryFee: {
+      type: Number,
+      required: true,
+    },
+    grandTotal: {
+      type: Number,
+      required: true,
+    },
     deliveryAddress: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Address",
@@ -22,7 +43,10 @@ const OrderSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    paymentMethod: { type: String, required: true },
+    paymentMethod: {
+      type: String,
+      required: true,
+    },
     paymentStatus: {
       type: String,
       default: "Pending",
@@ -41,15 +65,34 @@ const OrderSchema = new mongoose.Schema(
         "Out_for_Delivery",
       ],
     },
-    vendorId: { type: mongoose.Schema.Types.ObjectId, ref: "Vendor" },
+    vendorId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Vendor",
+    },
     VendorCoords: [Number],
     recipientCoords: [Number],
-    driverId: { type: String, default: "" },
-    rating: { type: Number, min: 1, max: 5, default: 3 },
-    feedback: { type: String },
-    promoCode: { type: String },
-    discountAmount: { type: Number },
-    notes: { type: String },
+    driverId: {
+      type: String,
+      default: "",
+    },
+    rating: {
+      type: Number,
+      min: 1,
+      max: 5,
+      default: 3,
+    },
+    feedback: {
+      type: String,
+    },
+    promoCode: {
+      type: String,
+    },
+    discountAmount: {
+      type: Number,
+    },
+    notes: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
